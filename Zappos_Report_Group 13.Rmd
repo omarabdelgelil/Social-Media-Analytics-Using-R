@@ -1,0 +1,1400 @@
+---
+title: "Zappos Twitter Analysis, Group 13"
+author: "Andres Olivera, Omar Abdelgelil, Kurt Kusterer"
+date: "2/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+#chanel_table
+load(file ='C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/chanel_table.RData')
+
+#day_table
+load(file ='C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/day_table.RData')
+
+# keyw1
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/keyw1.Rdata')
+
+#NRC Total Sentiments
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/summary_nrc.RData')
+
+#TotalScore_NRC
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/TotalScore_NRC.RData')
+
+#TotalScore_NRC
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/polarity.RData')
+
+#NET
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/summary_nrc6.RData')
+
+#summary_affin_positive
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/summary_affin_positive.RData')
+
+#summary_affin_negative
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/summary_affin_negative.RData')
+
+#Affin_tot_sent
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/Affin_tot_sent.RData')
+
+#day_table_AFFIN_2
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/day_table_AFFIN_2.RData')
+
+#day_table_BING
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/day_table_BING.RData')
+
+#summary_bing
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/summary_bing.RData')
+
+#TotalScore_Bing
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/TotalScore_Bing.RData')
+
+##ZAPPOS TWITTER
+#t_day_table_BING
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_day_table_BING.RData')
+
+#t_summary_bing
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_summary_bing.RData')
+
+#t_TotalScore_Bing
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_TotalScore_Bing.RData')
+
+#t_summary_affin_negative
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_summary_affin_negative.RData')
+
+#t_summary_affin_positive
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_summary_affin_positive.RData')
+
+#t_Affin_tot_sent
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_Affin_tot_sent.RData')
+
+#t_day_table_AFFIN_2
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_day_table_AFFIN_2.RData')
+
+#t_summary_nrc
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_summary_nrc.RData')
+
+#t_TotalScore_NRC
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_TotalScore_NRC.RData')
+
+#t_polarity
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_polarity.RData')
+
+#t_summary_nrc6
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/t_summary_nrc6.RData')
+
+#FOLLOWERS
+#load Zappos Followers account table
+load(file = 'C:/Users/aolivera/Desktop/zappos/ZapposFollowers.RData')
+
+#load Zappos Followers account table
+load(file = 'C:/Users/aolivera/Desktop/zappos/TweetsbyZappos.RData')
+
+#load Zappos Followers account table
+load(file = 'C:/Users/aolivera/Desktop/zappos/zappostweets.RData')
+```
+
+
+
+**About Zappos**
+
+Zappos.com is an online shoe, clothing and accessories retailer founded in San Francisco, USA by Nick Swinmurn with the name Shoesite.com and now it’s based in Las Vegas, USA. With customer service as their mantra and spread into the company’s culture, in less than 10 years the company manage to become a strong player in the e-commerce industry and in July of 2009 Amazon acquired them in a deal worth around $1.2 billion. This move that help the company keep growing and make use of Amazon’s already set up infrastructure for logistics.  
+
+Currently, the company has over 2.000 employees, in 2019 made 2 billion dollars in revenue and has kept and stable growth during the last decade. Zappos is devoted to its customers and it’s been recognized for its 24/7 call center. Now, given that we are in the age of social media explosion, we will analyze how the company is performing in Twitter by conducting a Sentiment Analysis and Topic Analysis on the users that when twitting mentioned the company. Also, we give a brief analysis on its followers and the tweets made by company.  
+
+ 
+
+
+**Sentiment Analysis with dictionaries:**  
+
+To conduct the sentiment analysis, three different dictionaries were used:  
+
+  AFFIN: Depending on the stress of the word, it assigns a positive or negative score to it.  
+
+  BING: Labels the word as positive or negative 
+
+  NRC: Label the word with 10 different sentiments (Positive, Joy, Anticipation, Anger, Trust,   Surprise, Sadness, Negative, Fear and Disgust) 
+  
+
+An individual analysis was conducted on every dictionary and we got a general conclusion combining the different results. 
+
+Overall, after doing an independent sentiment analysis with the different dictionaries, the online retailer company Zappos.com had, during the period of analysis, a positive sentiment on their social media platform, Twitter. The three dictionaries showed that the positive sentiment was strongly predominant during the month of analysis, being almost three times higher than the negative, and that the users twitting about Zappos are happy with the service provided by the company.  
+
+The top used words that showed up in all analysis regarding the Positive sentiment are: ‘Like’, ‘Good’, ‘Love’, ‘Great’ and ‘Customer’.  
+
+For the Negative sentiment the most relevant are: ‘Boycott’, ‘Hate’ and ‘Progaganda’.  
+
+Business wise, for any type company it is important that the public has a positive imagine of them and that those that interact in social media platforms do it in a positive way. Now days, with the world globalized and instant communication, bad reputation and a mishandle social media platform can cause serious damage to a company. In this sense, the company performing very well on this aspect, which gives them a reassurance of their excellent customer service and positive image among the public. However, Zappos should keep allocating resources to maintain this tendency and address those users that doesn’t have that positive image. 
+
+
+
+**Sentiment Analysis**
+**Tweets about Zappos:**
+
+4.930 tweets were extracted from the 28 of December of 2019 to the 27 of Jan of 2020. In the graph below, we can see the number of tweets per day. There is a big peak the on the day 18th to the 20th and then it goes back to the average.  
+
+```{r echo = FALSE}
+library(ggplot2)
+ggplot(data = day_table, aes(x = newday, y = n))+
+    geom_line(colour="steelblue1", size=1.5, stat="identity") +
+  scale_x_continuous(breaks = seq(1,31)) +
+  ggtitle("Number of Tweets per Day") + 
+  labs(x="Days", y="Tweets")
+
+```
+
+
+Below, we can see different representations of the data collected. On the left, there is a word cloud using bigrams and on the right, we have a word cloud with bigrams using lemmatization and filtering by noun and adjectives.  
+
+It can be seen in the bigram analysis that the pair of words that were used the most are ‘Amazong Ring’, Tampax always’ and ‘Pillpack Zappos’. On the right, we see that the word that was mentioned the most was ‘Redlobster’, followed by ‘Shoe’, ‘Sponsor’ and ‘Audiblecom’.  
+
+```{r echo = FALSE}
+
+load(file = 'C:/Users/aolivera/OneDrive - IESEG/IESEG/Courses/Second Semester/Social Media Anal/Group Project/Variables_rmarkdown/keyw2.RData')
+
+library(wordcloud)
+
+#PLOT
+#WordCloud KEYWORDS LEMMA BIGRAM
+set.seed(1234)
+wordcloud(words = keyw2$keyword, 
+          freq = keyw2$freq, 
+          min.freq = 1,
+          rot.per=0.30,
+          colors=brewer.pal(6, "Dark2"),
+          scale=c(0.8,0.5),
+          random.order=FALSE,
+          max.words = 30
+)
+
+```
+
+On the graph below, we can see that the user that tweeted the most about Zappos during the period of analysis were the ones with an iPhone. Then, surprisingly, more tweets came from the computer or the Web App than from Android. Finally, it is worth mentioning that iPad users are relevant, given that they are part of the top 4 users that tweeted the most.  
+
+
+
+```{r echo = FALSE}
+library(ggplot2)
+ggplot(data = chanel_table, aes(x = reorder(source, n), y = n)) +
+  geom_bar(stat="identity", fill=c("steelblue1")) +
+  labs( y = 'Number of Tweets',
+        x = 'Source',
+        title = "Top 4 Sources") +
+  coord_flip()
+```
+
+
+**Sentiment Analysis**
+**NRC Dictionary:** 
+
+Regarding the NRC analysis, we can see that not only the Positive sentiment is leading the chart, but also that the sentiments that follow it are linked to positivisms as well. Moreover, the Negative sentiment is located at the 6 position out of 11, and Disgust, a quite powerful sentiment linked with negativism is at the end of the chart too. 
+
+
+```{r echo = FALSE}
+library(ggplot2)
+library(dplyr)
+# PLOT 1 (use zoom to see it)
+# Plot 10 most relevant negative and positive words (NRC)
+TotalScore_NRC %>%
+  mutate(sentiment = reorder(sentiment, Freq)) %>%
+  ggplot(aes(x = sentiment, y= Freq, fill=Freq)) +
+  geom_col(show.legend = FALSE) +
+  labs(y = "Number of words ",
+       x = 'Sentiment', 
+       title = 'Number of words per sentiment - NRC dict.') +
+  coord_flip()
+
+```
+
+```{r echo = FALSE}
+#NET
+library(radarchart)
+chartJSRadar(summary_nrc6,main = 'Sentiment Analysis' )
+```
+
+
+In graph below, it can be seen that in the positive sentiment ‘money’ is the word that was mentioned the most, followed by ‘customer’ and ‘good’. From that, we can say that the company is performing well and that its mission is being reflected in this case because competitive prices and the high-quality customer service are part of their differentiation strategy.  
+
+
+```{r echo = FALSE}
+# PLOT 1 (use zoom to see it)
+# Plot 10 most relevant negative and positive words (NRC)
+library(ggplot2)
+library(dplyr)
+summary_nrc %>%
+  ungroup() %>%
+  mutate(suggestion = reorder(suggestion, n)) %>%
+  ggplot(aes(suggestion, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free") +
+  labs(y = "Number of Words",
+       x = 'Words', 
+       title = 'Most relevant words - NRC Dict.') +
+  coord_flip()
+
+```
+
+```{r echo = FALSE}
+#PLOT WORDCLOUD NRC SENTIMENTS
+library(wordcloud)
+set.seed(1)
+comparison.cloud(polarity, 
+                 scale = c(1,0.7), 
+                 match.colors = TRUE,
+                 title.size = 1, 
+                 max.words = 90)
+```
+
+Moreover, the fact that words like ‘Culture’, ‘Vision’ and 'Excited’ appear in other sentiments linked with positivism, leads us to the conclusion that the company’s users in twitter are satisfied and look up to the company.  
+
+Zappos should take into consideration that words like ‘Misleading’, ‘Hate’ and gross were mentioned too. As the analysis shows that the positive sentiment is a lot higher that the negative, the company can be relax about it, however it is important to have that in mind to keep improving the service and try to engage with this customer to change their minds.  
+
+In conclusion, the sentiment analysis conducted with the NRC dictionary shows that tweeter users that are tweeting about the company are rather satisfied with the service and that have a positive view of the firm. 
+
+
+
+**Sentiment Analysis**
+**Affin Dictionary: **
+
+In the Sentiment Analysis conducted with the dictionary Affin, it can be seen that the positive sentiment outperforms the negative by big margin. In total, the Positive sentiment triple in points the Negative, which means that the company in the period of analysis is performing very well in this social media platform. It’s worth noting that for a company like Zappos the period of the end of December and January, is crucial. The demand in the industry is periodical and its highest peaked is at this time of the year. 
+
+
+```{r echo = FALSE}
+# Total negative and positive of AFFIN
+ggplot(data = Affin_tot_sent, aes(x= Sentiments, y = total_sent)) +
+  geom_bar(stat="identity", fill=c("indianred3",'royalblue')) +
+  labs(y = "Score",
+       x = 'Sentiment', 
+       title = 'Total Score per Sentiment - Affin Dict.')
+
+```
+
+
+Going more into depth, we can see in Chart 4 that the word ‘Like’ is the one getting the highest score followed by ‘good’ and ‘love’. This shows that the company is having a very positive image among its tweeter users.  
+
+
+```{r echo = FALSE}
+#NEGATIVE score of words AFFIN
+library(ggplot2)
+library(dplyr)
+summary_affin_negative %>%
+  mutate(suggestion = reorder(suggestion, score)) %>%
+  ggplot(aes(x = suggestion, y= score, fill=score)) +
+  geom_col(show.legend = FALSE) +
+  labs(y = "Score per word",
+       x = 'Words', 
+       title = 'Score Negative Words') +
+  coord_flip()
+
+```
+
+```{r echo = FALSE}
+#POSITVE Score AFFIN
+library(ggplot2)
+library(dplyr)
+summary_affin_positive %>%
+  mutate(suggestion = reorder(suggestion, score)) %>%
+  ggplot(aes(x = suggestion, y= score, fill=score)) +
+  geom_col(show.legend = FALSE) +
+  labs(y = "Total score per word",
+       x = 'Words', 
+       title = 'Score Positive Words - Affin Dict.') +
+  coord_flip()
+```
+
+
+On the other hand, as can be seen in the graph below above that ‘boycott’ was the word with the highest negative score, followed by hate and propaganda. As the positive image was much bigger, the company should not worry too much about it, however, there is no harm in trying to approach the followers that used the word ‘hate’ and those that might have used propaganda in a negative way.  
+
+Finally, the graph below reconfirms that the positive sentiment; during the period of analysis, was constantly higher than the negative. Only on day 18 and 20 the negative score matched the positive, which means that the company, overall, is well regarded.  
+
+It is worth nothing that absolute value was used on the negative score for better representation on the graph below.  
+
+
+```{r echo = FALSE}
+library(ggplot2)
+ggplot(data = day_table_AFFIN_2, aes(x = newday, y = score )) +
+  geom_line( aes(color = Sentiments, linetype = Sentiments))+
+  ggtitle("Positive and Negative sentiments") + 
+  labs(x="Days", 
+       y="Tweets") 
+```
+
+
+**Sentiment Analysis**
+**Bing Dictionary: **
+
+In the Sentiment Analysis conducted with the dictionary Bing, it can be observed that overall, the positive sentiment is bigger and by a good margin that the negative. Chart 7 shows that in total, positive words were used twice as the negatives. Consequently, it is fair to say that the company is having a rather good performance in this social media platform. 
+
+
+```{r echo = FALSE}
+library(ggplot2)
+ggplot(data = TotalScore_Bing, aes(x= sentiment, y = Freq)) +
+  geom_bar(stat="identity", fill=c("indianred3",'royalblue')) +
+  labs( y = 'Number of words', 
+        title = "Total Words in Sentiments - Bing Dict.")
+
+```
+
+
+Chart 6 show us that ‘Like’ is the word most used, followed by audible and good. Those words transmit us that the user have a positive image of the company and that probably audible was a big hit during the month. 
+
+
+```{r echo = FALSE}
+library(dplyr)
+library(ggplot2)
+summary_bing %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(y = "Number of times word mentioned",
+       x = 'Words',
+       title = '10 most mentioned words - Bing Dict.') +
+  coord_flip()
+```
+
+
+On the other hand, boycott was the most mentioned word in the negative sentiment. Followed by sin and propaganda. The company should take a look at this and try to engage with these followers to try to change their perspective.  
+
+Moreover, graph below shows that during the time period the positive sentiment was always higher than the negative, only with the exception of day 5 and day 2.  
+
+
+```{r echo = FALSE}
+library(ggplot2)
+  
+ggplot(data = day_table_BING, aes(x = newday)) +
+  geom_line( aes(y = negative), colour="indianred3", size=1, stat="identity")+
+  geom_line( aes(y = positive), colour="steelblue1", size=1, stat="identity")+
+  scale_x_continuous(breaks = seq(1,31)) +
+  ggtitle("Positive and Negative sentiments") + 
+  labs(x="Days", 
+       y="Tweets") 
+  
+```
+
+
+
+**Tweets made by Zappos Account**
+**Sentiment Anlysis** 
+
+**BING DICTIONARY:** 
+
+In the sentiment analysis conducted with the dictionary BING of the tweets made by the company, the results show that the positive sentiment is strongly predominant during the period of analysis. Moreover, the word classified by the dictionary that was used the most by the company was ‘Sorry’, followed by ‘Unfortunately’, meaning that even their ‘Negative’ sentiment using twitter is actually very neutral and it’s mostly used to engaged for customer service. 
+
+
+```{r echo = FALSE}
+library(ggplot2)
+ggplot(data = t_day_table_BING, aes(x = newday)) +
+  geom_line( aes(y = negative), colour="indianred3", size=1, stat="identity")+
+  geom_line( aes(y = positive), colour="steelblue1", size=1, stat="identity")+
+  ggtitle("Positive and Negative sentiments") + 
+  labs(x="Days", 
+       y="Tweets") 
+
+```
+
+
+```{r echo = FALSE}
+library(dplyr)
+library(ggplot2)
+t_summary_bing %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(y = "Number of times word mentioned",
+       x = 'Words',
+       title = '10 most mentioned words - Bing Dict.') +
+  coord_flip()
+
+```
+
+
+```{r echo = FALSE}
+ggplot(data = t_TotalScore_Bing, aes(x= sentiment, y = Freq)) +
+  geom_bar(stat="identity", fill=c("indianred3",'royalblue')) +
+  labs( y = 'Number of words', 
+        title = "Total Words in Sentiments - Bing Dict.")
+
+```
+
+
+
+**Sentiment Analysis**
+**AFFIN Dictionary** 
+
+In the sentiment analysis conducted with the dictionary AFFIN of the tweets made by the company, the results show that the difference between the negative and positive sentiment is very strong, being the latter the predominant during the whole period of analysis. The negative sentiment is very stable and in terms of score, as can be seen in the graph below on the right, the positive is 5 times higher than the negative sentiment. 
+
+
+```{r echo = FALSE}
+library(ggplot2)
+#PLOT SCORE per DAY
+ggplot(data = t_day_table_AFFIN_2, aes(x = newday, y = score )) +
+  geom_line( aes(color = Sentiments, linetype = Sentiments))+
+  ggtitle("Positive and Negative sentiments") + 
+  labs(x="Days", 
+       y="Tweets") 
+
+```
+
+```{r echo = FALSE}
+library(ggplot2)
+ggplot(data = t_Affin_tot_sent, aes(x= Sentiments, y = total_sent)) +
+  geom_bar(stat="identity", fill=c("indianred3",'royalblue')) +
+  labs(y = "Score",
+       x = 'Sentiment', 
+       title = 'Total Score per Sentiment - Affin Dict.')
+
+```
+
+
+Moreover, the words that were labeled as positive and were used the most are ‘Love’, ‘Help’, and ‘Happy’. For the negative sentiment, ‘Sorry’, ‘ill’ and ‘Bad’ are the most frequent. From that, we can infer that the company mainly is approaching the customers for customer service and if not, they do it in a very friendly and respectful way.  
+
+
+```{r echo = FALSE}
+library(dplyr)
+library(ggplot2)
+t_summary_affin_negative %>%
+  mutate(word = reorder(word, score)) %>%
+  ggplot(aes(x = word, y= score, fill=score)) +
+  geom_col(show.legend = FALSE) +
+  labs(y = "Score per word",
+       x = 'Words', 
+       title = 'Score Negative Words') +
+  coord_flip()
+
+```
+
+```{r echo = FALSE}
+library(dplyr)
+library(ggplot2)
+t_summary_affin_positive %>%
+  mutate(word = reorder(word, score)) %>%
+  ggplot(aes(x = word, y= score, fill=score)) +
+  geom_col(show.legend = FALSE) +
+  labs(y = "Total score per word",
+       x = 'Words', 
+       title = 'Score Positive Words - Affin Dict.') +
+  coord_flip()
+
+```
+
+
+**Sentiment Analysis**
+**NRC Dictionary** 
+
+In the sentiment analysis conducted with the dictionary NRC of the tweets made by the company, the results show that the positive sentiment is the predominant. Also, the ones that follow it are quite linked to it, like Joy and Anticipation. This means, that the company mostly twitting in a very friendly, close and respectful manner.  
+
+
+```{r echo = FALSE}
+library(radarchart)
+
+chartJSRadar(t_summary_nrc6,main = 'Sentiment Analysis' )
+
+
+```
+
+```{r echo = FALSE}
+#PLOT of Total FREQ in NRC
+library(ggplot2)
+library(dplyr)
+t_TotalScore_NRC %>%
+  mutate(sentiment = reorder(sentiment, Freq)) %>%
+  ggplot(aes(x = sentiment, y= Freq, fill=Freq)) +
+  geom_col(show.legend = FALSE) +
+  labs(y = "Number of words ",
+       x = 'Sentiment', 
+       title = 'Number of words per sentiment - NRC dict.') +
+  coord_flip()
+
+```
+
+
+The words that were used the most are in the positive sentiment were ‘Love’, ‘Happy’ and ‘Glad’. On the other hand, in the negative sentiment, the word that was used the most is ‘Wait’ and it’s followed by ‘Shoot’. We can infer that the company is communication on this platform always in a positive way and that even what is labeled as ‘Negative’ is actually very neutral. 
+
+
+```{r echo = FALSE}
+library(ggplot2)
+library(dplyr)
+t_summary_nrc %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free") +
+  labs(y = "Number of Words",
+       x = 'Words', 
+       title = 'Most relevant words - NRC Dict.') +
+  coord_flip()
+
+```
+
+```{r echo = FALSE}
+#PLOT WORDCLOUD
+library(wordcloud)
+set.seed(1)
+comparison.cloud(t_polarity, 
+                 scale = c(1,1), 
+                 match.colors = TRUE,
+                 title.size = 1, 
+                 max.words = 60)
+
+```
+
+
+
+**Zappos Followers Account Analysis:**
+
+So part of our analysis is to analyze the followers of Zappos twitter account and do some descriptive analysis on them.
+We classify followers into active, passive and normal users. We use the rule <5000 post is passive, from 5000 to 15000 is normal, and greater than 15000 is active.
+
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic1.png)
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic2.png)
+
+
+Using the get_followers(), we got 5000 accounts with 90 variables. Out of those 90 variables we kept the most relevant ones and ended up with 17 variables 
+
+o	User_id
+
+o	Created_at
+
+o	Screen_name
+
+o	Source
+
+o	Lang
+
+o	Country
+
+o	Country_code
+
+o	Name
+
+o	Location
+
+o	Followers_count
+
+o	Friends_count
+
+o	Statuses_count
+
+o	Favourites_count
+
+o	Account_created_at
+
+o	Verified
+
+o	Account_lang
+
+o	text
+
+
+So we started by analyzing which language is spoken most by the followers .
+Almost 3000 of Zappos followers speaks English. Then English is followed by Spanish and then Portuguese. (UND stands for undetermined )
+
+
+
+```{r echo = FALSE}
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+followersupdated %>%
+  count(lang) %>%
+  droplevels() %>%
+  ggplot(aes(x = reorder(lang, desc(n)), y = n)) +
+  geom_bar(stat = "identity", color = "blue", fill = "blue", alpha = 0.8) +
+  theme_tq() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  labs(x = "language ISO 639-1 code",
+       y = "number of followers")
+```
+
+
+The second chart shows the location of the followers of Zappos. We took out the NA values because there are a lot of missing data and that did not make the scale work. Also, we took out the location United States because it is a country and not a state as the other output.
+
+
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+loca <- group_by(followersupdated, location)
+loca2 <- summarise(loca,  count=n())
+loca3 <- filter(loca2, count >10 & count != 1849 & location != 'United States' )
+
+ggplot(data=loca3, aes(x=reorder(location, count),y=count))+
+  geom_bar(stat="identity")+
+  coord_flip()
+
+```
+
+
+So looks like most of the followers are based in Las Vegas, followed by California and New York. And this could lead to a further analysis that usually Zappos followers tend to have a good salary based on the fact that the upper range of states in the graph are quite expensive and have a high quality of living standards compared to other stats.
+
+
+```{r echo = FALSE}
+library(usmap)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+plot_usmap(include = c("NV", "CA", "NY", "WA", "TX","IL","GA"),color = "red")  +
+  labs(title = "Zappos followers states") 
+
+```
+
+
+In this chart, we analyze how many of Zappos followers are verified users.
+
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic3.png)
+
+
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+vstat <- group_by(followersupdated, verified)
+vstat1 <- summarise(vstat,  count=n())
+
+statuschart <- ggplot(data=followersupdated, aes(x=verified))+
+  geom_bar(aes(fill=verified))+
+  labs(x="Verified Status", y="User count",
+       title="Zappos Twitter Follower Verified Status")
+statuschart
+
+```
+
+
+Here we perform a status correlation: We will investigate the relationships between among the continuous variables, namely Statuses_Count, Followers_Count, favorites_Count and friends_Count. From the correlation table we can see all of them share a positive correlation, however, followers_ count and friends_count are mostly correlated, approximately 0.9. 
+
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic4.png)
+
+
+Followers_count: how many followers do they have
+
+Friends_count: how many people do they follow
+
+Statuses_count: how many tweets do they have
+
+Favourites_count: how many tweets do they have in their favorites folder
+
+
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(corrplot)
+correl1 <- followersupdated[, c(10,11,12,13)]
+cvalue <- cor(correl1)
+cvalue
+corrplot(cvalue,title = "Correlation Plot of Twitter Counts" )
+
+```
+
+
+In this graph, we analyze the relation between the statuses_count and the favourites_count and divide the output into three groups Active, Normal and Passive. In general, it seems like Active Users tend to have a positive correlation between the number of statuses they have and the favorites count.
+
+
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(corrplot)
+followersupdated$sgp <-2
+followersupdated$sgp[followersupdated$statuses_count <5000] <-1
+followersupdated$sgp[followersupdated$statuses_count >15000] <-3
+
+followersupdated$stats <- ifelse(followersupdated$sgp == 1, "Passive",
+                                 ifelse( followersupdated$sgp ==2 , "Normal",
+                                         "Active"))
+activitytable <- group_by(followersupdated, stats)
+activitytable <- summarise(activitytable,  count=n())
+
+s1 <- ggplot(followersupdated,aes(x=favourites_count, y=statuses_count,color=stats)) +geom_point()+
+  labs(title="Zappos Followers statusesCount vs favoritesCount")
+s1
+```
+
+
+The next chart is a box plot to display the distribution of data based on a five number summary (“minimum”, first quartile (Q1), median, third quartile (Q3), and “maximum”). It shows outliers and what their values are. It can also tell you if the data is symmetrical, how tightly the data is grouped and how the data is skewed. We can see here that for normal and passive groups, the data is highly tighted. However, for the active group, the data is much more spread out around the median value as well as a lot of outliers showed off.
+
+
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(corrplot)
+s2<- ggplot(followersupdated, aes(x=stats, y=statuses_count, group=stats, color=stats))+geom_point(alpha=0.4)+ geom_boxplot()+ labs(x="zappos Followers Twitter Status", y="Twitter Number of Posts" ,title="zappos Followers Twitter Status")
+s2
+```
+
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(corrplot)
+big1 <- followersupdated
+big2<- big1[order(-big1$followers_count),]
+big3 <- big2[(big2$location !=" "),]
+big4<- big3[1:10,]
+
+b1 <- ggplot(data=big4, aes(x=reorder(name,followers_count),y=followers_count))+ geom_bar(stat="identity", aes(fill=location), width=0.4)+theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position="bottom") +
+  labs(x="Name", y="followers count",
+       title=" Top 10 Twitter Account with the Most Followers")
+b1
+```
+
+
+The next chart shows the Top 10 accounts from Zappos followers that have the most likes
+
+
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(corrplot)
+like2<- big1[order(-big1$favourites_count),]
+like3 <- like2[1:10,]
+
+b2 <- ggplot(data=like3, aes(x=reorder(name,favourites_count),y=favourites_count))+ geom_bar(stat="identity", aes(fill=location), width=0.4)+theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position="bottom") +
+  labs(x="Name", y="followers count",
+       title=" Top 10 Twitter accounts with the Most Favorites Tweets")
+b2
+```
+
+
+The next chart shows the top 10 Zappos followers accounts that follows the most number of people.
+
+
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(corrplot)
+friend2<- big1[order(-big1$friends_count),]
+friend3 <- friend2[1:10,]
+
+b3 <- ggplot(data=friend3, aes(x=reorder(name,friends_count),y=friends_count))+ geom_bar(stat="identity", aes(fill=location), width=0.4)+theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position="bottom") +
+  labs(x="Name", y="friends count",
+       title="Most Friends Twitter Account Top 10")
+b3
+```
+```{r echo = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(corrplot)
+tweet2<- big1[order(-big1$statuses_count),]
+tweet3 <- tweet2[1:10,]
+
+b4 <- ggplot(data=tweet3, aes(x=reorder(name,statuses_count),y=statuses_count))+ geom_bar(stat="identity", aes(fill=location), width=0.4)+theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position="bottom") +
+  labs(x="Name", y="tweets count",
+       title="Account Tweets the most Top 10")
+b4
+
+
+
+
+
+
+```
+
+
+
+
+**Topic Analysis for Tweets made by Zappos Account:**
+
+So we start by Investigating the Most Frequent terms: Top 20
+
+The Most Frequent term happens to be US. Since Zappos is based in USA so it makes sense that the US could be their most frequent term when they tweet. 
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic5.png)
+
+
+Another way to show the most frequent terms is by using word cloud. WordCloud is a technique to show which words are the most frequent among the given text
+
+
+```{r echo = FALSE}
+#Load packages needed
+
+#package if required
+library(tm)
+library(readr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(tidytext)
+library(wordcloud)
+# 1. Remove punctuation and numbers with regular expressions
+TweetsbyZapposComments <- mutate(TweetsbyZappos, message = gsub(x = TweetsbyZappos$text, pattern = "[0-9]+|[[:punct:]]|\\(.*\\)", replacement = ""))
+
+# 2. Tokenization (+ going to lowercase)
+TweetsbyZapposTokenized <- TweetsbyZapposComments %>% unnest_tokens(output = "word", # how should the new column be named?
+                                                                    input = message, # where can we find the text? 
+                                                                    token = "words", # which tokenization scheme should we follow?
+                                                                    drop=FALSE,to_lower=TRUE) # drop=FALSE specifies that we want to keep our text; to_lower puts everyting to lowercase
+
+# 3. Remove some other elements such as # and @ signs if they might occur
+TweetsbyZapposTokenized <- filter(TweetsbyZapposTokenized, substr(word, 1, 1) != '#', 
+                                  substr(word, 1, 1) != '@') # This compares for the first letter of a token# omit hashtags
+
+# 5. remove stopwords
+TweetsbyZapposTokenized <- TweetsbyZapposTokenized %>% anti_join(get_stopwords())
+#To keep only English words
+TweetsbyZapposTokenized <- filter(TweetsbyZapposTokenized, lang =="en")
+
+#lemmitization
+TweetsbyZappos_lemm <- TweetsbyZapposTokenized %>%
+  mutate(word = lemmatize_words(word))
+
+
+# 7 Create the document-term matrix
+# first, we need to get the number of times a word occurred in each document (or status, tweet)
+ByZapposLemmCount <- TweetsbyZappos_lemm %>% count(status_id,word)
+head(ByZapposLemmCount)
+
+# then, we could perform weighting (e.g., tfidf) using the bind_tf_idf(word,id,n) function
+# however, we will integreate this directly when making the document term matrix:
+ZapposCompanyDTM <- ByZapposLemmCount %>% cast_dtm(status_id,word,n,weighting = tm::weightTfIdf)
+
+
+# let's inspect this matrix
+# we can see that it is a special R format, a DocumenttermMatrix object, 
+#which is a special form of a sparse matrix
+# we can convert this to a normal matrix as as.matrix(oxfamDTM)
+# we can also convert it back to tidy format as tidy(oxfamDTM)
+# This is a very sparse matrix
+# we can reduce sparseness by removing the most sparse terms:
+ZapposCompanyDTM <- removeSparseTerms(ZapposCompanyDTM,0.99)
+
+
+#8.  inspect our text
+# Now let us explore this. Let's assume we want to quickly see what the texts are talking about.
+# A natural next step is to have a quick look at our text
+# We can do this both by tables and figures
+# note that for this purpose, the tibble format is most useful (ZapposTokenizedCount)
+#we can look at associations/correlations between words (this is with the dtm):
+findAssocs(ZapposCompanyDTM, terms = "delivery", corlimit = 0.1)
+
+#investigate the most frequent terms
+ZapposCoFreq <- ByZapposLemmCount %>% group_by(word) %>% 
+  summarize(freq = n()) %>%
+  arrange(-freq)                  
+head(ZapposCoFreq)
+
+
+#We can also build a wordcloud in order to give this insight visually
+# what is the basis for a wordcloud? Term frequencies
+# Load the package wordcloud
+
+#Word cloud based on the tibble and all text pre-processing
+#create word cloud
+wordcloud(ZapposCoFreq$word, ZapposCoFreq$freq,
+          max.words=40,
+          scale=c(3,1))
+
+
+
+
+```
+
+
+Next of, we need to find the K which is the number of topics we assume to be in the text. Using the FindTopicsNumber function and using Package ldatuning realizes 4 metrics to select perfect number of topics for LDA model. The 4 metrics used are Griffiths2004, CaoJuan2009, Arun2010 and Deveaud2014.
+
+The most easy way is to calculate all metrics at once. All existing methods require to train multiple LDA models to select one with the best performance. It is computation intensive procedure and ldatuning uses parallelism. 
+
+
+```{r echo = FALSE}
+
+
+#package if required
+library(tm)
+library(readr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(wordcloud)
+library(ldatuning)
+library(topicmodels)
+#Part3: Topic Modelling Analysis 
+# We will only cover one topic modeling technique: LDA
+#Estimate the model
+# install and load the topic_models package in R
+# do some basic preprocessing steps to change the weighting from weightTfIDf to weightTf:
+ZapposCoDTM2 <- ByZapposLemmCount %>% cast_dtm(document = status_id,term = word,value = n,
+                                               weighting = tm::weightTf)
+# Note that it is not always necessary to use all the words
+# A part-of-speech tagging could for instance indicate the nouns and adjectives. 
+#Probably these will be most important for the topics
+#Estimate the model
+# install and load the topicmodels package in R
+# a lot of other packages offering topic models actually refer to this package 
+
+# set a seed so that the output of the model is predictable
+# k is the number of topics we assume to be in the text
+# note that k is an assumption the researcher has to make!
+
+result2 <- FindTopicsNumber(
+  ZapposCoDTM2,
+  topics = seq(from = 2, to = 15, by = 1),
+  metrics = c("Griffiths2004", "CaoJuan2009", "Arun2010", "Deveaud2014"),
+  method = "Gibbs",
+  control = list(seed = 77),
+  mc.cores = 2L,
+  verbose = TRUE
+)
+#plot the result output
+FindTopicsNumber_plot(result2)
+
+
+```
+
+
+So from the output graph, we can deduct that optimum range of K would be from 3 to 5.
+
+Now that we chose our K to be 3, we need to run the LDA model on our Document Term Matrix using Gibbs Sampling.
+
+LDA is a mathematical method for estimating the following: finding the mixture of words that is associated with each topic, while also determining the mixture of topics that describes each document. 
+
+The LDA function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.
+
+After fitting the model, we need to analyze the output. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called β (“beta”).
+
+
+```{r echo = FALSE}
+library(tm)
+library(readr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(wordcloud)
+library(ldatuning)
+library(topicmodels)
+#so based on the plot the optimum K will be = in the range of 3 to 5
+# in order to be good, we would need to tune the number of topics to discover
+# the post below shows how to to just that, with another R package
+# https://cran.r-project.org/web/packages/ldatuning/vignettes/topics.html
+# Note that also the method used can influence the result (VEM or Gibbs sampling, and the parameters of the Gibbs sampling)
+tweets_lda2 <- LDA(ZapposCoDTM2, k = 3,method="gibbs",control = list(nstart = 5, burnin = 2000, best = TRUE, seed = 2:6) )
+tweets_lda2
+
+```
+
+```{r echo = FALSE}
+library(tm)
+library(readr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(wordcloud)
+library(ldatuning)
+library(topicmodels)
+# OK, now we have to figure our what the model has done!
+#get the terms per topic: which terms determine the topic?
+#in this model, this is captured in @beta of the model
+#see here for more info: https://www.tidytextmining.com/topicmodeling.html#latent-dirichlet-allocation
+tweet_topics2 <- tidy(tweets_lda2, matrix = "beta")
+
+# you can use the following code to get the top terms per topic
+top_tweet_terms2 <- tweet_topics2 %>%
+  group_by(topic) %>%
+  top_n(8, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+top_tweet_terms2
+
+```
+
+
+Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term “blue” has a 9.1×10−4 probability of being generated from topic 1, but a 1.27×10−5 probability of being generated from topic 2 and a 1.24x10-5 probability of being generated from topic 3.
+
+The following chart shows the top terms that are most common within each topic.
+
+
+```{r echo = FALSE}
+library(tm)
+library(readr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(wordcloud)
+library(ldatuning)
+library(topicmodels)
+top_tweet_terms2 %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+
+```
+
+
+The most common words in topic 1 include “au”, “wz”, “good”, “thank”, and “like” which suggests it may represent the company’s emotional interaction with the clients over tweets. Those most common in topic 2 include “love”, “Lr”, “get”,”just” suggesting that this topic represents products promotions.The most common words for Topic 3 include words like “us”, “look”,”sorry”,”can” where it could leads that this topic speaks about customer service handling customers complains.
+
+Document-topic probabilities analysis (GAMMA): Besides estimating each topic as a mixture of words, LDA also models each document as a mixture of topics. We can examine the per-document-per-topic probabilities, called γ (“gamma”), with the matrix = "gamma" argument to tidy().
+
+
+```{r echo = FALSE}
+library(tm)
+library(readr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(textstem)
+library(tidyquant)
+library(ggthemes)
+library(wordcloud)
+library(ldatuning)
+library(topicmodels)
+tweet_documents2 <- tidy(tweets_lda2, matrix = "gamma")
+
+# CHoose, per tweet, the most important topic (the one with the highest weight)
+tweet_doc_topic2 <- tweet_documents2 %>%
+  group_by(document) %>%
+  arrange(desc(gamma)) %>%
+  slice(1) 
+
+tweet_doc_topic2 %>%
+  group_by(topic) %>% 
+  summarise(nbr_documents = n())
+```
+
+
+Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that only about 35% of the words in document 1169113622872233808 were generated from topic 3.
+
+So in total the following table shows how many documents fits unders which topic
+
+So the majority of documents fits under topic 1.
+
+
+
+**Topic Analysis for Tweets made by Twitter users on Zappos:**
+
+In Topic Analysis, we figure out what a tweet is talking about. The topic model used in our case is Latent Dirichlet Allocation (LDA)
+
+Latent Dirichlet Allocation (LDA) is a topic modelling algorithm used for extracting topics from a given collection of documents. It builds models in unsupervised mode so does not need labelled training data. 
+
+Based on the assumption that a document contains a mixture of N underlying different topics, and the document is generated by these topics with different proportions or probabilities, LDA is able to find out the topics and their relative proportions, which are distributed as a Latent Dirichlet random variable. The algorithm’s performance can be managed though assumptions on the word and topic distributions. 
+
+Given a pre-set of parameters such as α, which is the parameter of the Dirichlet prior on the per-document topic distributions and β, which is the parameter of the Dirichlet prior on the per-topic word distribution, the only required input is the documents and fixed topic number N (K). The output of LDA contains two parts. Part one is N topics with a list of words and count numbers for each word. Part two, for each document, indicates which topics it might belong to and the relative probability. 
+
+The general processing procedure using LDA is as follows: 
+1. Setting parameters. The default parameters are α = 0.1; β = 0.01; minTokenCount = 5; 
+2. Choose a topic number N or K and input data file. 
+3. Tokenize for the text data or column.
+4. Run LDA algorithm to get the latent structure behind the text and print out the result
+
+So we start by Investigating the Most Frequent terms: Top 20
+
+The Most Frequent term happens to be Amazon. Since Amazon is the biggest retailer in the world so a reason of such association could be customers searching for a product on Amazon and might find it as well on Zappos so compare between them. 
+
+For the remaining terms a lot of them are other big brands in the US such as Disney,Ihop, Reblobster,RubyTuesday and one reason for that could be due to Partnerships or Sponsoships.
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic6.png)
+
+
+Another way to show the most frequent terms is by using word cloud. WordCloud is a technique to show which words are the most frequent among the given text
+
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic7.png)
+
+
+Next of, we need to find the K which is the number of topics we assume to be in the text. Using the FindTopicsNumber function and using Package ldatuning realizes 4 metrics to select perfect number of topics for LDA model. The 4 metrics used are Griffiths2004, CaoJuan2009, Arun2010 and Deveaud2014. The most easy way is to calculate all metrics at once. All existing methods require to train multiple LDA models to select one with the best performance. It is computation intensive procedure and ldatuning uses parallelism. 
+
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic8.png)
+
+
+So from the output graph, we can deduct that optimum range of K would be from 3 to 5.
+
+Now that we chose our K to be 3, we need to run the LDA model on our Document Term Matrix using Gibbs Sampling.
+
+LDA is a mathematical method for estimating the following: finding the mixture of words that is associated with each topic, while also determining the mixture of topics that describes each document.
+
+The LDA function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.
+
+After fitting the model, we need to analyze the output. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called β (“beta”).
+
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic9.png)
+
+
+Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term “amazon” has a 5.45 ×10−6 probability of being generated from topic 1, but a 1.05×10−1 probability of being generated from topic 2 and a 3.74x10-6 probability of being generated from topic 3.
+
+The following chart shows the top terms that are most common within each topic.
+
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic10.png)
+
+
+The most common words in topic 1 include “like”, “good”, “get”, “shoe”, and “company” which suggests it may represent customer’s satisfaction regarding the products specifically shoes. Those most common in topic 2 include “amazon”, “ihop”, “hulu”,”disney” suggesting that this topic represents comparison between Zappos and it’s competitors.The most common words for Topic 3 include words like “redlobster”, “rubytuesday”,”proctergamble”,”applebees” where it could leads that this topic speaks about promotions made by Zappos.
+
+Document-topic probabilities analysis (GAMMA): Besides estimating each topic as a mixture of words, LDA also models each document as a mixture of topics. We can examine the per-document-per-topic probabilities, called γ (“gamma”), with the matrix = "gamma" argument to tidy().
+
+
+![Activity status split.](C:/Users/aolivera/Desktop/zappos/omar/pic11.png)
+
+
+Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that only about 43% of the words in document 1218656347727659008 were generated from topic 3.
+
+
+```{r echo = FALSE, eval=FALSE}
+###################################################
+#Group Project Social Media Analytics             #
+# Zappos Twitter Analysis                         #
+# Group Members:                                  #
+#Omar Abdelgelil / Andres Olivera / Kurt Kusterer #
+###################################################
+
+#Part 1: Download the Data
+#Load packages needed
+for (i in c('SnowballC','slam','tm','Matrix','tidytext','dplyr','hunspell','purrr')){
+  if (!require(i, character.only=TRUE)) install.packages(i, repos = "http://cran.us.r-project.org")
+  require(i, character.only=TRUE)
+}
+
+#package if required
+if(!require("rtweet")) install.packages("rtweet"); library("rtweet")
+library(readr)
+
+# create the access token (authentication)
+twitter_token <- create_token(
+  app = "SMAZappos",
+  consumer_key = "1sYqJBv6SQwuMIF6ni4xkiXRe",
+  consumer_secret = "h22WWqESBd7KdLKCoImTdUX9or8MjRi80Y7g9w084oK1kcu66w",
+  access_token = "1218864891550994432-TC1YfVJPzePvRJfbJUvE9rUQqa0pHK",
+  access_secret = "71wK8KCBj3RUmsXFdSuK8ewC2X2OvPHY53ecmznDj73Cm",
+  set_renv=FALSE)
+
+
+#Here we get tweets made by the company itself (posted by Zappos using timelines)
+TweetsbyZappos <- get_timelines("Zappos", n = 5000) %>% dplyr::filter(created_at > "2019-08-01 00:00:00" & created_at <= "2019-12-31 23:59:59")
+
+# Usage of this function will add latitude and longitude when possible
+Zapposlatlng <- lat_lng(TweetsbyZappos)
+# now we will plot this on a world map
+par(mar = c(0, 0, 0, 0))
+if(!require("maps")) install.packages("maps"); library("maps")
+## this will make a map of the world with country boundaries
+maps::map("world", lwd = .25)
+
+# plot lat and lng points onto world map
+points(Zapposlatlng$lng, Zapposlatlng$lat, pch = 20, cex = 1,col="red")
+
+#save(TweetsbyZappos,file ="C:/Users/oabdelgelil/Desktop/Social Media Analytics/project/TweetsbyZappos.RData")
+load("C:/Users/oabdelgelil/Desktop/Social Media Analytics/project/TweetsbyZappos.RData")
+
+#Part2: Text Preprocessing
+# 1. Remove punctuation and numbers with regular expressions
+TweetsbyZapposComments <- mutate(TweetsbyZappos, message = gsub(x = TweetsbyZappos$text, pattern = "[0-9]+|[[:punct:]]|\\(.*\\)", replacement = ""))
+
+# 2. Tokenization (+ going to lowercase)
+TweetsbyZapposTokenized <- TweetsbyZapposComments %>% unnest_tokens(output = "word", # how should the new column be named?
+                                                                    input = message, # where can we find the text? 
+                                                                    token = "words", # which tokenization scheme should we follow?
+                                                                    drop=FALSE,to_lower=TRUE) # drop=FALSE specifies that we want to keep our text; to_lower puts everyting to lowercase
+
+# 3. Remove some other elements such as # and @ signs if they might occur
+TweetsbyZapposTokenized <- filter(TweetsbyZapposTokenized, substr(word, 1, 1) != '#', 
+                                  substr(word, 1, 1) != '@') # This compares for the first letter of a token# omit hashtags
+
+#4: spelling correction: I Didn't do it
+
+# 5. remove stopwords
+TweetsbyZapposTokenized <- TweetsbyZapposTokenized %>% anti_join(get_stopwords())
+#To keep only English words
+TweetsbyZapposTokenized <- filter(TweetsbyZapposTokenized, lang =="en")
+
+#Remove the word Zappos
+#TweetsbyZapposTokenized <- filter(TweetsbyZapposTokenized, word != "zappos")
+
+#Lemmitization
+install.packages("textstem")
+library(textstem)
+TweetsbyZappos_lemm <- TweetsbyZapposTokenized %>%
+  mutate(word = lemmatize_words(word))
+
+
+# 7 Create the document-term matrix
+# first, we need to get the number of times a word occurred in each document (or status, tweet)
+ByZapposLemmCount <- TweetsbyZappos_lemm %>% count(status_id,word)
+head(ByZapposLemmCount)
+
+# then, we could perform weighting (e.g., tfidf) using the bind_tf_idf(word,id,n) function
+# however, we will integreate this directly when making the document term matrix:
+ZapposCompanyDTM <- ByZapposLemmCount %>% cast_dtm(status_id,word,n,weighting = tm::weightTfIdf)
+
+# let's inspect this matrix
+# we can see that it is a special R format, a DocumenttermMatrix object, 
+#which is a special form of a sparse matrix
+# we can convert this to a normal matrix as as.matrix(oxfamDTM)
+# we can also convert it back to tidy format as tidy(oxfamDTM)
+# This is a very sparse matrix
+# we can reduce sparseness by removing the most sparse terms:
+ZapposCompanyDTM <- removeSparseTerms(ZapposCompanyDTM,0.99)
+
+
+#8.  inspect our text
+# Now let us explore this. Let's assume we want to quickly see what the texts are talking about.
+# A natural next step is to have a quick look at our text
+# We can do this both by tables and figures
+# note that for this purpose, the tibble format is most useful (ZapposTokenizedCount)
+#we can look at associations/correlations between words (this is with the dtm):
+findAssocs(ZapposCompanyDTM, terms = "delivery", corlimit = 0.1)
+#investigate the most frequent terms
+ZapposCoFreq <- ByZapposLemmCount %>% group_by(word) %>% # for this, we need to have the sum over all documents
+  summarize(freq = n()) %>%
+  arrange(-freq)                  # arrange = order; from most frequent term to lowest frequent
+head(ZapposCoFreq)
+
+#We can also build a wordcloud in order to give this insight visually
+# what is the basis for a wordcloud? Term frequencies
+# Load the package wordcloud
+if (!require("wordcloud")) {
+  install.packages("wordcloud",repos="https://cran.rstudio.com/",
+                   quiet=TRUE)
+  require("wordcloud")
+}
+#Word cloud based on the tibble and all text pre-processing
+#create word cloud
+wordcloud(ZapposCoFreq$word, ZapposCoFreq$freq,
+          max.words=40,
+          scale=c(3,1))
+
+#Part3: Topic Modelling Analysis 
+# We will only cover one topic modeling technique: LDA
+#Estimate the model
+# install and load the topic_models package in R
+# do some basic preprocessing steps to change the weighting from weightTfIDf to weightTf:
+ZapposCoDTM2 <- ByZapposLemmCount %>% cast_dtm(document = status_id,term = word,value = n,
+                                               weighting = tm::weightTf)
+# Note that it is not always necessary to use all the words
+# A part-of-speech tagging could for instance indicate the nouns and adjectives. 
+#Probably these will be most important for the topics
+#Estimate the model
+# install and load the topicmodels package in R
+# a lot of other packages offering topic models actually refer to this package 
+if (!require("topicmodels")) install.packages("topicmodels", quiet=TRUE) ; require("topicmodels")
+# set a seed so that the output of the model is predictable
+# k is the number of topics we assume to be in the text
+# note that k is an assumption the researcher has to make!
+install.packages("ldatuning")
+library("ldatuning")
+library("topicmodels")
+
+result2 <- FindTopicsNumber(
+  ZapposCoDTM2,
+  topics = seq(from = 2, to = 15, by = 1),
+  metrics = c("Griffiths2004", "CaoJuan2009", "Arun2010", "Deveaud2014"),
+  method = "Gibbs",
+  control = list(seed = 77),
+  mc.cores = 2L,
+  verbose = TRUE
+)
+#plot the result output
+FindTopicsNumber_plot(result2)
+#so based on the plot the optimum K will be = in the range of 3 to 5
+# in order to be good, we would need to tune the number of topics to discover
+# the post below shows how to to just that, with another R package
+# https://cran.r-project.org/web/packages/ldatuning/vignettes/topics.html
+# Note that also the method used can influence the result (VEM or Gibbs sampling, and the parameters of the Gibbs sampling)
+tweets_lda2 <- LDA(ZapposCoDTM2, k = 3,method="gibbs",control = list(nstart = 5, burnin = 2000, best = TRUE, seed = 2:6) )
+tweets_lda2
+
+# OK, now we have to figure our what the model has done!
+#get the terms per topic: which terms determine the topic?
+#in this model, this is captured in @beta of the model
+#see here for more info: https://www.tidytextmining.com/topicmodeling.html#latent-dirichlet-allocation
+tweet_topics2 <- tidy(tweets_lda2, matrix = "beta")
+
+# you can use the following code to get the top terms per topic
+top_tweet_terms2 <- tweet_topics2 %>%
+  group_by(topic) %>%
+  top_n(8, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+top_tweet_terms2
+
+if (!require("ggplot2")) install.packages("ggplot2", quiet=TRUE) ; require("ggplot2")
+top_tweet_terms2 %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+
+# 2. get the topics per document: which topics determine the documents?
+# in this model, this is captured in @gamma of the model
+# These values give the estimated proportion of words in that tweet from topic 1, topic 2, .... 
+# The higher the value, the better, because we have better distinction between topics
+
+tweet_documents2 <- tidy(tweets_lda2, matrix = "gamma")
+
+# CHoose, per tweet, the most important topic (the one with the highest weight)
+tweet_doc_topic2 <- tweet_documents2 %>%
+  group_by(document) %>%
+  arrange(desc(gamma)) %>%
+  slice(1) 
+
+tweet_doc_topic2 %>%
+  group_by(topic) %>% 
+  summarise(nbr_documents = n())
+
+```
